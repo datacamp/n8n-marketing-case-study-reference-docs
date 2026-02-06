@@ -118,13 +118,12 @@ You are a world-class Chief Marketing Officer (CMO) with expertise in digital st
 
 ---
 
-## Marketing Operations Manager
+## Marketing Ops Manager
 
 ### Define Prompt (Text)
 
 ```
 Take the CMO's tasks for specialized agents and refine and clarify tasks.
-But do not ignore the CMO's actual content.
 
 CMO's assigned tasks for specialized agents:
 
@@ -134,8 +133,9 @@ content_strategy_agent_task: {{ $json.output.content_strategy_task }}
 
 paid_ads_agent_task: {{ $json.output.paid_ads_task }}
 
-Keep tasks high-level and strategical. Don't request development of full assets like complete blog posts or documents. 
-Respond ONLY with valid JSON, no commentary, no markdown.
+- Keep tasks high-level and strategic. Add details where needed, but keep it short (300 words max per task).
+- Don't request development of full assets like complete blog posts or documents. 
+- Respond ONLY with valid JSON.
 ```
 
 ### System Message
