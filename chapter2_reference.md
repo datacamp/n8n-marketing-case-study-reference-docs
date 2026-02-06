@@ -57,12 +57,12 @@ Configure the Form Trigger with these fields:
 | Field Label | Field Type | Options | Required |
 |-------------|------------|---------|----------|
 | Landing Page Url | Text | Placeholder: `https://www.example.com` | ✅ Yes |
-| Main goal of the page | Dropdown | `lead`, `sale`, `signup` | ✅ Yes |
+| Main goal of the page | Dropdown | `Lead acquisition`, `Increase sales`, `Increase signups` | ✅ Yes |
 | Audience description | Text | — | ✅ Yes |
 
 **Form Title:** `Conversion Rate Optimizer`
 
-**Form Description:** `Your Landing Page is Leaking Sales—Fix It Now`
+**Form Description:** `Your Landing Page is Leaking Sales. Fix It Now.`
 
 ---
 
@@ -257,21 +257,6 @@ Example Structure:
 ```
 
 **Note:** This agent does NOT need a System Message or Structured Output Parser—the prompt enforces JSON output format.
-
----
-
-## Shared OpenAI Chat Model
-
-One OpenAI Chat Model node connects to all three agents:
-
-| Setting | Value |
-|---------|-------|
-| Model | `gpt-5-mini` |
-
-Connect this single node to:
-- Agent 1 - Idea Generator
-- Agent 2 - Parameter Setter
-- Agent 3 - The Judge
 
 ---
 
