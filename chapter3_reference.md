@@ -8,51 +8,7 @@ This reference guide contains all the configurations, code, and settings you nee
 
 This workflow scrapes Google Maps for business leads and extracts emails from their websites:
 
-```
-On form submission (query + location)
-    ↓
-Run an Actor (Apify Google Maps Scraper)
-    ↓
-Get dataset items (retrieve results)
-    ↓
-Extract URLs (Set node)
-    ↓
-Remove Duplicate links
-    ↓
-Limit to 10
-    ↓
-┌─────────────────────────────────────────────────┐
-│           SCRAPE EACH WEBSITE LOOP              │
-│  Split In Batches                               │
-│      ├── Output 1 (done) → Wait 5s → continues  │
-│      └── Output 2 (batch) → Scrape Site         │
-│                                  ↓              │
-│                              Wait (1s)          │
-│                                  ↓              │
-│                          Extract Emails         │
-│                                  ↓              │
-│                          (loops back)           │
-└─────────────────────────────────────────────────┘
-    ↓ (after loop completes, splits into 2 streams)
-┌─────────────────────┬─────────────────────┐
-│    Stream A         │    Stream B         │
-│    Business Data    │    Email Data       │
-│         ↓           │         ↓           │
-│  Google maps data   │  Filter Out Empties │
-│         ↓           │         ↓           │
-│    All details      │    Split Out        │
-│    into single      │         ↓           │
-│    item             │  Remove Duplicate   │
-│                     │  emails             │
-│                     │         ↓           │
-│                     │  All emails into    │
-│                     │  single data        │
-└──────────┬──────────┴──────────┬──────────┘
-           ↓                     ↓
-        Merge the incoming items
-           ↓
-        Final data (Code node)
-```
+![Google Maps Lead Scraper Workflow](images/lead_scraper.png)
 
 **The flow in simple terms:**
 1. User submits a search query (e.g., "Plumbers") and location (e.g., "Miami, FL")

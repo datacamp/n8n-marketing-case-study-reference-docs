@@ -8,33 +8,7 @@ This reference guide contains all the prompts, schemas, and code you need to com
 
 Start here! This diagram shows how data flows through your AI marketing department:
 
-```
-Manual Trigger
-    ↓
-Enter business details (Set node with 12 fields)
-    ↓
-CMO Agent → IF validation → [error handling]
-    ↓
-Marketing Operations Manager → IF validation → [error handling]
-    ↓ (splits into 3 parallel branches)
-┌───────────────────┬───────────────────┬───────────────────┐
-Brand Identity      Content Marketing   Performance Marketing
-Agent               Agent               Agent
-    ↓                   ↓                   ↓
-IF validation       IF validation       IF validation
-    ↓                   ↓                   ↓
-└───────────────────┴───────────────────┴───────────────────┘
-    ↓ (merge all 3)
-Merge Strategy Sections (3 inputs)
-    ↓
-Assembler (Code node)
-    ↓
-Edit Fields (Set node)
-    ↓
-CMO Summary Agent
-    ↓
-Final Executive Brief
-```
+![Multi-Agent Marketing System Workflow](images/marketing_multiagent_system.png)
 
 **The flow in simple terms:**
 1. Business data enters through a Set node

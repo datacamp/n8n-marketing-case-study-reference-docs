@@ -8,36 +8,7 @@ This reference guide contains all the prompts, schemas, and code you need to com
 
 This workflow analyzes landing pages and generates Conversion Rate Optimization (CRO) ideas using a 3-agent chain with a quality feedback loop:
 
-```
-Landing Page Form (Form Trigger)
-    ↓
-Scrape Website (HTTP Request)
-    ↓
-Trim HTML Content (Code node)
-    ↓
-Markdown (Convert HTML → text)
-    ↓
-Init Variables (retry_count=0, feedback_context="")
-    ↓
-┌─────────────────────────────────────────────────────┐
-│                    LOOP START                       │
-│  Loop Merge (combines initial data + feedback)      │
-│      ↓                                              │
-│  Agent 1 - Idea Generator (10 CRO ideas)            │
-│      ↓                                              │
-│  Agent 2 - Parameter Setter (5 evaluation criteria) │
-│      ↓                                              │
-│  Agent 3 - The Judge (scores + critique)            │
-│      ↓                                              │
-│  Parse Judge Output (calculate average score)       │
-│      ↓                                              │
-│  Is Score > 7?                                      │
-│      ├── YES → Final Output                         │
-│      └── NO → Check Retries < 3                     │
-│                  ├── YES → Update Loop Params ──────┤
-│                  └── NO → Final Output              │
-└─────────────────────────────────────────────────────┘
-```
+![Conversion Rate Optimizer Workflow](images/conversion_rate_optimizer.png)
 
 **The flow in simple terms:**
 1. User submits a landing page URL, goal, and audience description
