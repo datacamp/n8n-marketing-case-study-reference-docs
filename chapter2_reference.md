@@ -21,31 +21,6 @@ This workflow analyzes landing pages and generates Conversion Rate Optimization 
 
 ---
 
-## Form Trigger Fields
-
-Configure the Form Trigger with these fields:
-
-| Field Label | Field Type | Options | Required |
-|-------------|------------|---------|----------|
-| Landing Page Url | Text | Placeholder: `https://www.example.com` | ✅ Yes |
-| Main goal of the page | Dropdown | `Lead acquisition`, `Increase sales`, `Increase signups` | ✅ Yes |
-| Audience description | Text | — | ✅ Yes |
-
-**Form Title:** `Conversion Rate Optimizer`
-
-**Form Description:** `Your Landing Page is Leaking Sales. Fix It Now.`
-
----
-
-## HTTP Request Configuration
-
-| Setting | Value |
-|---------|-------|
-| URL | `{{ $json['Landing Page Url'] }}` |
-| Headers | `User-Agent: Mozilla/5.0` |
-
----
-
 ## Trim HTML Content (Code Node)
 
 This JavaScript extracts the `<main>` content or removes header/nav/footer as fallback:
@@ -85,48 +60,6 @@ for (const item of items) {
 
 return items;
 ```
-
----
-
-## Markdown Node Configuration
-
-| Setting | Value |
-|---------|-------|
-| HTML | `{{ $json.cleaned_html }}` |
-
----
-
-## Init Variables (Set Node)
-
-Initialize these fields in **Manual Mapping** mode:
-
-| Field Name | Type | Value |
-|------------|------|-------|
-| retry_count | Number | `0` |
-| feedback_context | String | `` (empty) |
-
----
-
-## Loop Merge Node
-
-The Merge node combines two inputs:
-- **Input 1:** Initial data from Init Variables (first run)
-- **Input 2:** Updated loop parameters from retry path
-
-**Mode:** Keep default (Append)
-
----
-
-## Important: Verify Node Names in Expressions
-
-The prompts below use expressions like `$('Landing Page Url')` and `$('Markdown')` to reference data from other nodes. **These names must match your actual node names exactly.**
-
-Before pasting a prompt, check that:
-- Your Form Trigger node is named `Landing Page Url` (rename it if needed)
-- Your Markdown node is named `Markdown`
-- Your Agent nodes are named exactly as shown (e.g., `Agent 1 - Idea Generator`)
-
-If your node names differ, update the expressions in the prompts to match.
 
 ---
 
@@ -279,47 +212,6 @@ try {
 
 ---
 
-## Score Check (IF Node)
-
-### Is Score > 7?
-
-| Setting | Value |
-|---------|-------|
-| Condition | `{{ $json.final_score }}` is greater than `7` |
-| Type | Number |
-
-- **True path →** Final Output
-- **False path →** Check Retries
-
----
-
-## Retry Check (IF Node)
-
-### Check Retries < 3
-
-| Setting | Value |
-|---------|-------|
-| Condition | `{{ $('Loop Merge').item.json.retry_count }}` is less than `3` |
-| Type | Number |
-
-- **True path →** Update Loop Params (retry)
-- **False path →** Final Output (give up after 3 attempts)
-
----
-
-## Update Loop Params (Set Node)
-
-Configure these fields to increment the counter and store feedback:
-
-| Field Name | Type | Value |
-|------------|------|-------|
-| retry_count | Number | `{{ $('Loop Merge').item.json.retry_count + 1 }}` |
-| feedback_context | String | `{{ $json.critique }}` |
-
-**Connect output to:** Loop Merge (Input 2)
-
----
-
 ## Final Output (Set Node)
 
 Package all results into a clean output:
@@ -366,19 +258,3 @@ OpenAI Chat Model
     → Agent 3 - The Judge
 ```
 
----
-
-## Key Concepts in This Workflow
-
-| Concept | Where It's Used |
-|---------|-----------------|
-| Form Trigger | User input collection with dropdown |
-| HTTP Request | Web scraping with headers |
-| Code nodes | HTML cleaning, JSON parsing |
-| Markdown node | HTML → text conversion |
-| Agent chaining | Sequential agents (1 → 2 → 3) |
-| Shared Chat Model | One model for multiple agents |
-| Loop pattern | Merge node with two inputs |
-| Conditional logic | IF nodes for score/retry checks |
-| Feedback loop | Critique fed back to Agent 1 |
-| Expression references | `$('Node Name').item.json.field` |

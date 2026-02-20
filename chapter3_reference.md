@@ -35,22 +35,6 @@ Before building the workflow, you need an Apify API token to authenticate API re
 
 ---
 
-## Form Trigger Configuration
-
-| Setting | Value |
-|---------|-------|
-| Form Title | `Lead scraper` |
-| Form Description | _(optional)_ |
-
-### Form Fields
-
-| Field Label | Type | Required |
-|-------------|------|----------|
-| query | Text | ✅ Yes |
-| location | Text | ✅ Yes |
-
----
-
 ## Calling Apify via HTTP Request
 
 Since we're using HTTP Request nodes to call the Apify API, here's how the two requests work:
@@ -129,72 +113,6 @@ This retrieves the scraped business listings from the dataset.
 
 ---
 
-## Extract URLs (Set Node)
-
-Extract the website field from each Apify result:
-
-| Field Name | Type | Value |
-|------------|------|-------|
-| website | String | `{{ $json.website }}` |
-
----
-
-## Data Cleaning Nodes
-
-### Remove Duplicate Links
-
-| Setting | Value |
-|---------|-------|
-| Compare | All fields |
-| Keep | First occurrence |
-
-### Limit to 10
-
-| Setting | Value |
-|---------|-------|
-| Max Items | 10 |
-
----
-
-## Split In Batches Configuration
-
-| Setting | Value |
-|---------|-------|
-| Batch Size | 1 (process one at a time) |
-
-**Outputs:**
-- **Output 1 (top)**: Items that have been processed (done)
-- **Output 2 (bottom)**: Current batch item to process
-
----
-
-## Scrape Site (HTTP Request)
-
-| Setting | Value |
-|---------|-------|
-| URL | `{{ $json.website }}` |
-| Follow Redirects | ✅ Yes |
-| Max Redirects | 5 |
-| On Error | Continue (don't stop workflow) |
-
----
-
-## Wait Nodes
-
-### Wait (after scraping)
-
-| Setting | Value |
-|---------|-------|
-| Amount | 1 second |
-
-### Wait 5 seconds (after batch completes)
-
-| Setting | Value |
-|---------|-------|
-| Amount | 5 seconds |
-
----
-
 ## Extract Emails (Code Node)
 
 This JavaScript uses regex to find email addresses in the scraped HTML:
@@ -232,71 +150,6 @@ Extract business details to preserve alongside emails:
 | phone | String | `{{ $('Get dataset items').item.json.phone }}` |
 | emails | String | `{{ $json.emails }}` |
 | location | String | `{{ $('Get dataset items').item.json.city }}` |
-
----
-
-## Filter Out Empties (Filter Node)
-
-Only keep items that have emails:
-
-| Setting | Value |
-|---------|-------|
-| Field | `{{ $json.emails }}` |
-| Condition | Array exists |
-
----
-
-## Split Out Node
-
-Flatten the emails array so each email becomes a separate item:
-
-| Setting | Value |
-|---------|-------|
-| Field to Split Out | `emails` |
-
----
-
-## Remove Duplicate Emails
-
-| Setting | Value |
-|---------|-------|
-| Compare | All fields |
-| Keep | First occurrence |
-
----
-
-## Aggregate Nodes
-
-### All Details Into Single Item
-
-Combines all business data items into a single array:
-
-| Setting | Value |
-|---------|-------|
-| Aggregate | All Item Data |
-
-### All Emails Into Single Data
-
-Combines all email items into a single array:
-
-| Setting | Value |
-|---------|-------|
-| Aggregate | All Item Data |
-
----
-
-## Merge the Incoming Items
-
-Combines the two parallel streams:
-
-| Setting | Value |
-|---------|-------|
-| Mode | Append |
-| Number of Inputs | 2 |
-
-**Connections:**
-- Input 1: All details into single item (business data)
-- Input 2: All emails into single data (email data)
 
 ---
 
@@ -470,19 +323,6 @@ try {
 
 ---
 
-## Important: Verify Node Names in Expressions
-
-The configurations above use expressions like `$('Get dataset items')` to reference data from other nodes. **These names must match your actual node names exactly.**
-
-Before pasting configurations, check that:
-- Your Form Trigger is named appropriately
-- Your Apify nodes match the names in expressions
-- All node names referenced in Code nodes exist
-
-If your node names differ, update the expressions to match.
-
----
-
 ## Quick Reference: Node Connections
 
 ```
@@ -502,23 +342,3 @@ All emails into single data → Merge the incoming items (Input 2)
 
 Merge the incoming items → Final data
 ```
-
----
-
-## Key Concepts in This Workflow
-
-| Concept | Where It's Used |
-|---------|-----------------|
-| Form Trigger | User input (query + location) |
-| Apify integration | External API for Google Maps scraping |
-| Set node | Extract specific fields |
-| Remove Duplicates | Clean URLs and emails |
-| Limit node | Cap number of items |
-| Split In Batches | Loop through items one at a time |
-| Wait node | Rate limiting between requests |
-| Code node (Regex) | Extract emails from HTML |
-| Filter node | Remove empty results |
-| Split Out | Flatten arrays |
-| Aggregate | Combine items into single array |
-| Merge | Join parallel data streams |
-| Code node (formatting) | Structure final JSON output |
